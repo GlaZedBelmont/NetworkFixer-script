@@ -4,25 +4,28 @@ regsvr32 /s hnetcfg.dll
 $m = New-Object -ComObject HNetCfg.HNetShare
 
 # List connections
-#$m.EnumEveryConnection |% { $m.NetConnectionProps.Invoke($_) }
+$m.EnumEveryConnection |% { $m.NetConnectionProps.Invoke($_) }
 
 # Find connection
-$c = $m.EnumEveryConnection |? { $m.NetConnectionProps.Invoke($_).Name -eq "Wi-Fi" }
+$c = $m.EnumEveryConnection |? { $m.NetConnectionProps.Invoke($_).Name -eq "WiFi" }
 
 # Get sharing configuration
 $config = $m.INetSharingConfigurationForINetConnection.Invoke($c)
 
 # See if sharing is enabled
-#Write-Output $config.SharingEnabled
+Write-Output $config.SharingEnabled
+
+
 
 $config.DisableSharing()
+Restart-Service -Name SharedAccess
 $config.EnableSharing(0)
 
 # SIG # Begin signature block
 # MIIbkgYJKoZIhvcNAQcCoIIbgzCCG38CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUAUy5OEIlr5VT3inupvVyIB/k
-# eN+gghYLMIIDADCCAeigAwIBAgIQRvp5PAV6m5tLo6sHTP8v/TANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUMhZH4sQPO55RP2zSz4fB7cHd
+# mjKgghYLMIIDADCCAeigAwIBAgIQRvp5PAV6m5tLo6sHTP8v/TANBgkqhkiG9w0B
 # AQsFADAYMRYwFAYDVQQDDA1HbGF6eSBTY3JpcHRzMB4XDTIzMDMwMzAxMTEzOVoX
 # DTI0MDMwMzAxMzEzOVowGDEWMBQGA1UEAwwNR2xhenkgU2NyaXB0czCCASIwDQYJ
 # KoZIhvcNAQEBBQADggEPADCCAQoCggEBANolCvWyDOHuIjkLeGgIXjtFRyt8532I
@@ -143,28 +146,28 @@ $config.EnableSharing(0)
 # MRYwFAYDVQQDDA1HbGF6eSBTY3JpcHRzAhBG+nk8BXqbm0ujqwdM/y/9MAkGBSsO
 # AwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEM
 # BgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqG
-# SIb3DQEJBDEWBBQRDjkTWK0jGZcsvZjdpVDAtwiJfDANBgkqhkiG9w0BAQEFAASC
-# AQA21BI/Z2w8zCAAlefZdkqHPobMZKDurTXxOd7aKDe5ZFrDLi29p9iOmC1TjEiL
-# w/gcSd50zrCEM8q4HCVAgxjJ+4tLM6hscHWg9VktcWvM81BQlJPOAiXU555xpddL
-# MbRPcgBIa/iUOtAmlL969flSNe5vO2hJg/oxiCpYejJt5PfHlzCEQq/RJolMLHwd
-# i6ruh3NPuzCqrmC+duhbapX23SnJeaSTBoiBUqlycaFI2TEY5ZYvqEL0KZ1udwJN
-# 8TLLjUmBRB6hsfdCBY/zCHy/EO0i3VeNHOnxmHqs74XheyquE1YPI+o7i8L8rcdV
-# wIXRQ4eetuu8+vgP/QDOoV6ooYIDIDCCAxwGCSqGSIb3DQEJBjGCAw0wggMJAgEB
+# SIb3DQEJBDEWBBRaXKGgCvJ7iUwVgTm9wEYMTHQPgzANBgkqhkiG9w0BAQEFAASC
+# AQB9v/K1RGptvbx4f3aOSPcbOuGTcq+CoMIwFTrwgEK58gNzKfOKRo/OC/Ya02ep
+# xrO3zrxAzgaWg+/xG1x0kTFEGR0BhjU+CHeAD+NBt0DFrew8/Vd6b0FR3N9oN4zk
+# q4IFvunRoKrhorcfnaRflllhSqfgzjocgK2nLxN+9k8QJf7KfW9UqJDy7mqf08G4
+# 9h4Jbq138uscnyy70yuCqlnZA3GuPKTt8wyzo//uP9egI8GW4IZ2TIBbQP7+Vu5m
+# q9GQHjbEkr1nrpG3PXzb2wwYVHPKLIdFnapvpULR/Jxq4/v6LmmGzVI6dobSe6Hr
+# VKIaixeDvEkyL2f29jC+DozooYIDIDCCAxwGCSqGSIb3DQEJBjGCAw0wggMJAgEB
 # MHcwYzELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lDZXJ0LCBJbmMuMTswOQYD
 # VQQDEzJEaWdpQ2VydCBUcnVzdGVkIEc0IFJTQTQwOTYgU0hBMjU2IFRpbWVTdGFt
 # cGluZyBDQQIQDE1pckuU+jwqSj0pB4A9WjANBglghkgBZQMEAgEFAKBpMBgGCSqG
-# SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDMwMzAxNDMz
-# MVowLwYJKoZIhvcNAQkEMSIEIKQKP/SstuFLaJQxBZeCdcbCVoCPscC3kjXjdphW
-# FvcbMA0GCSqGSIb3DQEBAQUABIICAG+dfC1CJF/1UQFO/Rq4uq0tjmWtW9SS7uax
-# WzUA3xPN5b8D8w+i/iPw/ewMJ/WFSQeNf7GjkqM5jFkhaamTaU5nuFXCvqUKgI8Z
-# G75tn5T13cWnO5aeq6CPUdbUjO7v6w0/TjmYrE+DWKsHCupDmbUAxsuWJ6D/gjoN
-# 6Mx4tJOJgtapR6C7yLj6a/pvdUWBu1vZl5wXXt2mHCa65J/5WaYqaHr4LaNRYA3b
-# OnHaBOUyA46u6mdZLJsTKQui6MWD9R5Kv9f8o9VE1qA/REkWeQ7bv/zV6uAW2xP/
-# lWG3KYlsLFPUO5CP3A1F1pcg4p/Pnv4LOnAZVccZF7NbByWmbiBaGx069ffgdI4Y
-# pJmaaOxpfwBDIO/gXYzdFKDqKXHDidvAgfZBUgkN12yB1yANV9J8fiARNlWaMZr4
-# 3ENQpDet+xzA/iNO8fPsv5FBHT3ijInZZCDqP362wg28b0qUivjlmnvKURDWsJ7D
-# 6GZ6WK+LpyBC/lhCdIP0gtdWoqmChEnqPapLQzYDyXYQVhi2Sec9RwFSZLVTfZwK
-# KZ68JYpRXRFcSL/gGJlgC89Z/ITAJ48GAnnai1ZSGCpDKWXld2eY4ooPSrvVLjJ3
-# QT5ClHw1ckIUor/eaSZD1e6W+AWp3PXH8PIqk0n00dtfrM8l0OcqVAEgPRGrKvTf
-# N5xW0A4D
+# SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDMxMDAzNDUy
+# N1owLwYJKoZIhvcNAQkEMSIEIPzx+7YF1UA8B5bfxqhGScgTtcVEfPF+pWYxqEIs
+# ACi8MA0GCSqGSIb3DQEBAQUABIICAEmcHLC86w/kYdY95wDOKDT/BEg04IZ8y764
+# otn8oxtmzM/LBxXY5r9cOJWAjTnIZhkkEuVin2FsIz/54sk6+lD6WNMqDHT+nO29
+# iM0eJp93oDHM+BGt03uLQiyyJdkvekvanMRmsT5l0GdN117sje/p7TZ/iSBVcRzE
+# Emnvuw5jeEKWAZ98SpG2gx8A3rz4j2N2X3O322NCRsDAvUxeCSWFyqBJEsuNP3Lw
+# NCIutjHTPkpDJ4stJQHj6UBccJvmO7gYDah/LWCnpijHMP08Fw4dYzlwkbHSM2bR
+# rXE1Y46CjdLF15VNK0I01pSSq7iZDMXWnoNqi5kUBGoKowMqeGpMKm2mhV4x9XwS
+# OQu8gDE9YvvUVxs0lBTLuptvGxF+/L7Zxdgr4IEVNZLD774TiNCU4et6JF85dI0R
+# BXUjMoW0d62J7n2ZUQ/G2gi+GGHzCMKStWInGtY7OrK4EgSqg6naTn9yDy5FXbJb
+# jvBXPPoIq7LEvpmmnHlx3s8IDQnJhxbUJyo8Go0M2IH/x7fIhilj7RHJN5ncgfMg
+# S8E6UHKRsaeh3iaxlt5s6X9U+ppHof4mM36r/4PJvxT27cGQt8otAdnNHB9kRS/c
+# IZwAIKTOhGSG9TYCmJ56WgJw5sjTaaKHKq1BAu4aqpa+1R6xKOqEk3K4NwfykGaL
+# abT7V3BP
 # SIG # End signature block
